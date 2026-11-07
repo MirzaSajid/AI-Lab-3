@@ -1,0 +1,28 @@
+Supplied code (manual Section 3.2), path only
+bfs -> ['A', 'B', 'E', 'G']
+dfs -> ['A', 'B', 'E', 'G']
+
+BFS trace (queue, front first)
+step | processed | path | frontier after
+1 | A | A | [B, C]
+2 | B | A -> B | [C, D, E]
+3 | C | A -> C | [D, E, F]
+4 | D | A -> B -> D | [E, F]
+5 | E | A -> B -> E | [F, G]
+6 | F | A -> C -> F | [G]
+7 | G | A -> B -> E -> G | []
+Final path : A -> B -> E -> G
+Visit order: A, B, C, D, E, F, G (7 nodes processed, goal included)
+Matches supplied code path: True
+
+DFS trace (stack, top first)
+step | processed | path | frontier after
+1 | A | A | [B, C]
+2 | B | A -> B | [D, E, C]
+3 | D | A -> B -> D | [E, C]
+4 | E | A -> B -> E | [G, C]
+5 | G | A -> B -> E -> G | [C]
+Final path : A -> B -> E -> G
+Visit order: A, B, D, E, G (5 nodes processed, goal included)
+Matches supplied code path: True
+

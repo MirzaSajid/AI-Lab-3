@@ -1,0 +1,39 @@
+== Part 1: summary on the A-G graphs (goal processing included) ==
+algorithm | graph | path | nodes processed
+BFS | original | A -> B -> E -> G | 7
+DFS | original | A -> B -> E -> G | 5
+DLS limit 3 | original | A -> B -> E -> G | 5
+IDDFS max depth 4 | original | A -> B -> E -> G | 15 (final iteration 5)
+UCS | weighted (C -> G added) | A -> B -> E -> G | 5
+
+== Part 2: edge cases ==
+PASS | start == goal: BFS returns [A]
+PASS | start == goal: DFS returns [A]
+PASS | start == goal: DLS limit 0 FOUND [A]
+PASS | start == goal: IDDFS FOUND [A] after limit 0 only
+PASS | start == goal: UCS returns [A] with cost 0
+PASS | unreachable H: BFS returns None
+PASS | unreachable H: DFS returns None
+PASS | unreachable H: DLS limit 2 is CUTOFF (not proof of unreachability)
+PASS | unreachable H: DLS limit 4 is FAILURE (space exhausted)
+info | IDDFS for unreachable H attempted limits [0, 1, 2, 3] -> FAILURE
+PASS | unreachable H: IDDFS ends with FAILURE before max depth
+PASS | unreachable H: UCS returns None
+PASS | cycle: BFS terminates and finds E
+PASS | cycle: DFS terminates and finds E
+PASS | cycle: DLS limit 3 FOUND with path-local check
+PASS | cycle: IDDFS FOUND at limit 3
+info | cycle graph: BFS path A -> B -> D -> E cost 7; UCS path A -> C -> D -> E cost 3
+PASS | cycle: UCS finds cheaper path (cost 3) than BFS (cost 7)
+PASS | negative edge weight is rejected (UCS assumes nonnegative costs)
+
+== Part 3: failure demo - global visited set inside DLS ==
+graph: {'A': ['B', 'C'], 'B': ['D'], 'D': ['C'], 'C': ['X'], 'X': ['G'], 'G': []}
+shortest route A -> C -> X -> G has depth 3; limit = 3
+flawed (global visited) result : not found
+correct (path-local) result    : FOUND A -> C -> X -> G
+correct visit order            : A, B, D, C, C, X, G
+PASS | flawed global-visited DLS misses the valid depth-3 route
+PASS | path-local DLS finds A -> C -> X -> G
+
+19/19 checks passed

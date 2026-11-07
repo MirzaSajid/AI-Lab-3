@@ -1,0 +1,37 @@
+Weighted graph (edges in successor order)
+edge | weight | note
+A -> B | 1 | original
+A -> C | 5 | original
+B -> D | 2 | original
+B -> E | 1 | original
+C -> F | 3 | original
+C -> G | 7 | ADDED (Section 3.7)
+E -> G | 1 | original
+
+UCS trace (frontier = priority queue by path cost, ties by insertion order)
+step | processed | cost | path | frontier after
+1 | A | 0 | A | [B(1), C(5)]
+2 | B | 1 | A -> B | [E(2), D(3), C(5)]
+3 | E | 2 | A -> B -> E | [D(3), G(3), C(5)]
+4 | D | 3 | A -> B -> D | [G(3), C(5)]
+5 | G | 3 | A -> B -> E -> G | [C(5)]
+UCS final path      : A -> B -> E -> G
+UCS processing order: A, B, E, D, G (5 nodes processed, goal included)
+Cost reported by UCS: 3
+Independent edge-weight sum: 1 + 1 + 1 = 3
+
+BFS on the same weighted topology
+BFS processing order: A, B, C, D, E, F, G (7 nodes processed, goal included)
+BFS path: A -> C -> G
+Hops: 2 | independent cost: 5 + 7 = 12
+
+Comparison of hop count and total cost
+algorithm | path | hops | cost | processing order
+BFS | A -> C -> G | 2 | 12 | A, B, C, D, E, F, G
+UCS | A -> B -> E -> G | 3 | 3 | A, B, E, D, G
+
+Exhaustive check: every simple path from A to G
+path | hops | cost
+A -> B -> E -> G | 3 | 3
+A -> C -> G | 2 | 12
+Minimum-cost path: A -> B -> E -> G (cost 3); UCS agrees: True
